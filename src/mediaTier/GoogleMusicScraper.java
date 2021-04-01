@@ -38,9 +38,6 @@ public class GoogleMusicScraper extends DirectWebScraper<AudioResource> implemen
 
 		//Scraping songs from google songs panels
 		Elements songsPanels = document.select("div.rl_feature").select("a.rl_item_base").select(".rl_item");
-
-		//Preparing resources variable
-		setResources(new ArrayList<>());
 		
 		//Presentation of fetching progression
 		int found = 0;

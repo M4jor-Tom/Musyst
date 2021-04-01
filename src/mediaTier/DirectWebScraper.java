@@ -17,7 +17,7 @@ public abstract class DirectWebScraper<ResourceType extends Resource> implements
 	public DirectWebScraper(String fetchUrl)
 	{
 		//Initialization of Resources and Cookies to null
-		setResources(null);
+		setResources(new ArrayList<>());
 		
 		//Setting data
 		setFetchUrl(fetchUrl);
