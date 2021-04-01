@@ -2,7 +2,9 @@ package mediaTier;
 
 import java.util.ArrayList;
 
-public interface MediaInterface<ResourceType>
+import resourcePackage.Resource;
+
+public interface MediaInterface<ResourceType extends Resource>
 {
 	public ArrayList<ResourceType> getResources();
 }
