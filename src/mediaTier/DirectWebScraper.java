@@ -23,8 +23,6 @@ public abstract class DirectWebScraper<ResourceType extends Resource> implements
 		setFetchUrl(fetchUrl);
 	}
 
-	public abstract void actualizeResources();
-
 	public Document getDocument(String stringUrl)
 	{
 		try
