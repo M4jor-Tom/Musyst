@@ -1,10 +1,16 @@
 package mediaTier;
 
+import resourcePackage.*;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class GoogleMusicScraper extends DirectWebScraper implements MediaInterface
+public class GoogleMusicScraper extends DirectWebScraper<AudioResource> implements MediaInterface<AudioResource>
 {
 	private String _author;
 	
@@ -12,6 +18,7 @@ public class GoogleMusicScraper extends DirectWebScraper implements MediaInterfa
 	{
 		super("https://www.google.com/");
 		setAuthor(author);
+		actualizeResources();
 	}
 	
 	public void actualizeResources()
@@ -28,17 +35,33 @@ public class GoogleMusicScraper extends DirectWebScraper implements MediaInterfa
 		setAuthor(author.html());
 
 		Elements songsPanels = document.select("div.rl_feature").select("a.rl_item_base").select(".rl_item");
-		Elements songsName = songsPanels.select("div.title");
 
 		//Preparing return variable
-		//ArrayList<Resource> resources = new ArrayList<>();
-		//int found = 0;
+		setResources(new ArrayList<>());
+		int found = 0;
 		System.out.println("Found musics for author: " + getAuthor());
 		for(Element songPanel: songsPanels)
 		{
 			String songName = songPanel.select("div.title").html();
-			String songUrl = songPanel.attr("href");
-			System.out.println(songName + ": " + songUrl);
+			String songUrl = super.getFetchUrl() + songPanel.attr("href");
+			System.out.println(++found + " " + songName);// + ": " + songUrl);
+			try
+			{
+				getResources().add(
+					new AudioResource(
+						Resource.UNDEFINED,
+						new URL(songUrl),
+						null,
+						songName,
+						getAuthor()
+					)
+				);
+			}
+			catch(MalformedURLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
