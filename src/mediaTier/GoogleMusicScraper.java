@@ -23,33 +23,41 @@ public class GoogleMusicScraper extends DirectWebScraper<AudioResource> implemen
 	
 	public void actualizeResources()
 	{
+		//Updating fetching URL to match author name
 		setFetchUrl(getFetchUrl() + "search?q=" + getAuthorName() + " musics");
 		
+		//Printing fetching URL
 		System.out.println("Finding musics on: \"" + getFetchUrl() + "\" ...");
 		
-		Document document;
+		//Opening web document
+		Document document = getDocument(getFetchUrl());
 		
-		Element author = (document = getDocument(getFetchUrl()))
-			.select("span[data-elabel]").first();
-		
+		//Acknowledging author name
+		Element author = document.select("span[data-elabel]").first();
 		setAuthorName(author.html());
 
+		//Scraping songs from google songs panels
 		Elements songsPanels = document.select("div.rl_feature").select("a.rl_item_base").select(".rl_item");
 
-		//Preparing return variable
+		//Preparing resources variable
 		setResources(new ArrayList<>());
+		
+		//Presentation of fetching progression
 		int found = 0;
 		System.out.println("Found musics for author: " + getAuthorName());
 		for(Element songPanel: songsPanels)
 		{
+			//Getting current song's data
 			String songName = songPanel.select("div.title").html();
 			String songUrl = super.getFetchUrl() + songPanel.attr("href");
+			
+			//Printing song's data
 			System.out.println(++found + " " + songName);// + ": " + songUrl);
 			try
 			{
+				//Added a new resource to resource list
 				getResources().add(
 					new AudioResource(
-						Resource.UNDEFINED,
 						new URL(songUrl),
 						null,
 						songName,
