@@ -12,18 +12,18 @@ import org.jsoup.select.Elements;
 
 public class GoogleMusicScraper extends DirectWebScraper<AudioResource> implements MediaInterface<AudioResource>
 {
-	private String _author;
+	private String _authorName;
 	
-	public GoogleMusicScraper(String author)
+	public GoogleMusicScraper(String authorName)
 	{
 		super("https://www.google.com/");
-		setAuthor(author);
+		setAuthorName(authorName);
 		actualizeResources();
 	}
 	
 	public void actualizeResources()
 	{
-		setFetchUrl(getFetchUrl() + "search?q=" + getAuthor() + " musics");
+		setFetchUrl(getFetchUrl() + "search?q=" + getAuthorName() + " musics");
 		
 		System.out.println("Finding musics on: \"" + getFetchUrl() + "\" ...");
 		
@@ -32,14 +32,14 @@ public class GoogleMusicScraper extends DirectWebScraper<AudioResource> implemen
 		Element author = (document = getDocument(getFetchUrl()))
 			.select("span[data-elabel]").first();
 		
-		setAuthor(author.html());
+		setAuthorName(author.html());
 
 		Elements songsPanels = document.select("div.rl_feature").select("a.rl_item_base").select(".rl_item");
 
 		//Preparing return variable
 		setResources(new ArrayList<>());
 		int found = 0;
-		System.out.println("Found musics for author: " + getAuthor());
+		System.out.println("Found musics for author: " + getAuthorName());
 		for(Element songPanel: songsPanels)
 		{
 			String songName = songPanel.select("div.title").html();
@@ -53,7 +53,7 @@ public class GoogleMusicScraper extends DirectWebScraper<AudioResource> implemen
 						new URL(songUrl),
 						null,
 						songName,
-						getAuthor()
+						new Author(getAuthorName())
 					)
 				);
 			}
@@ -65,13 +65,13 @@ public class GoogleMusicScraper extends DirectWebScraper<AudioResource> implemen
 		}
 	}
 
-	public String getAuthor()
+	public String getAuthorName()
 	{
-		return _author;
+		return _authorName;
 	}
 
-	public void setAuthor(String author)
+	public void setAuthorName(String authorName)
 	{
-		_author = author;
+		_authorName = authorName;
 	}
 }
