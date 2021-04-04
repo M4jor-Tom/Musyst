@@ -31,7 +31,10 @@ public abstract class DirectWebScraper<ResourceType extends Resource> implements
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			if(e.toString().contains("Status=429"))
+				System.out.println("Too many requests sent, please try again later");
+			else
+				e.printStackTrace();
 		}
 		return null;
 	}
