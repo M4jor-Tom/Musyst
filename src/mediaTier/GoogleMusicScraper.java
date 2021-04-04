@@ -4,6 +4,8 @@ import resourcePackage.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -45,8 +47,9 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 		}
 		setAuthorName(authorElement.html());
 		
-		//Instantiation of Author object
+		//Instantiation of Author object and its albums
 		Author author = new Author(getAuthorName());
+		ArrayList<Album> albums = new ArrayList<>();
 
 		//Scraping songs from google songs panels
 		Elements albumPanels = document.select("a[role=listitem]");
@@ -60,7 +63,7 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 			String albumName = albumPanel.attr("aria-label");
 			
 			//Instantiation of Album object
-			Album album = new Album(author, albumName);
+			albums.add(new Album(author, albumName));
 			
 			//Printing album's data
 			System.out.println("Album #" + ++foundAlbum + ": " + albumName);
@@ -95,7 +98,7 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 					URL youtubeSongUrl = new URL(youtubeSongStringUrl);
 					
 					//Instantiation of MusicResource object
-					album.getMusicResources().add(new MusicResource(youtubeSongUrl, null, songName));
+					albums.get(albums.size() - 1).getMusicResources().add(new MusicResource(youtubeSongUrl, null, songName));
 					
 					System.out.println("Song #" + ++foundSong + ": " + songName + " (" + youtubeSongUrl + ")");
 				}
