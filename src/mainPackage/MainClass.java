@@ -1,7 +1,7 @@
 package mainPackage;
 
 import mediaTier.*;
-import resourcePackage.AudioResource;
+import resourcePackage.MusicResource;
 
 public class MainClass
 {
