@@ -46,7 +46,12 @@ public abstract class MusicResourceDownloader extends DirectWebScraper<MusicReso
 			
 			//Creating local File
 			File file = new File(
-				downloadPath + "\\" + (fileStringPath.replace("/", "+").replace("&amp;", "&"))
+				downloadPath + "\\" + (
+					fileStringPath
+						.replace("/", "+")
+						.replace("&amp;", "&")
+						.replace("?", "")
+				)
 			);
 			
 			//Extracting data from Connection's response
