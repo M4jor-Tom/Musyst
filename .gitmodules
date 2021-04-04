@@ -1,3 +1,6 @@
 [submodule "Resourcyst"]
 	path = Resourcyst
 	url = https://github.com/M4jor-Tom/Resourcyst
+[submodule "vget"]
+	path = vget
+	url = https://github.com/Litarvan/vget
