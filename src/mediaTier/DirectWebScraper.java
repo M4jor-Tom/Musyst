@@ -32,7 +32,7 @@ public abstract class DirectWebScraper<ResourceType extends Resource> implements
 		catch (IOException e)
 		{
 			if(e.toString().contains("Status=429"))
-				System.out.println("Too many requests sent, please try again later");
+				System.out.println("Too many requests sent, please try again later or use a VPN for this time");
 			else
 				e.printStackTrace();
 		}
