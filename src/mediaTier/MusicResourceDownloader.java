@@ -9,13 +9,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.jsoup.Connection;
-import resourcePackage.Resource;
 
-public abstract class AudioResourceDownloader extends DirectWebScraper<Resource>
+import resourcePackage.MusicResource;
+
+public abstract class MusicResourceDownloader extends DirectWebScraper<MusicResource>
 {
 	private final String DOWNLOAD_FOLDER_PATH = "D:\\Download\\";
 	
-	public AudioResourceDownloader(String fetchUrl)
+	public MusicResourceDownloader(String fetchUrl)
 	{
 		super(fetchUrl);
 		

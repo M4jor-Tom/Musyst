@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class GoogleMusicScraper extends DirectWebScraper<AudioResource> implements MediaInterface<AudioResource>
+public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implements MediaInterface<MusicResource>
 {
 	private String _authorName;
 	
