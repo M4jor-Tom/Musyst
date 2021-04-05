@@ -12,20 +12,21 @@ import org.jsoup.select.Elements;
 
 public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implements MediaInterface<MusicResource>
 {
-	private String _authorName;
+	private ArrayList<Album> _albums;
+	
 	private static final String GOOGLE_STRING_URL = "https://www.google.com";
 	
-	public GoogleMusicScraper(String authorName)
+	public GoogleMusicScraper()
 	{
 		super(GOOGLE_STRING_URL);
-		setAuthorName(authorName);
-		downloadResources();
+		setAlbums(new ArrayList<>());
 	}
 	
-	public void downloadResources()
+	@Override
+	public ArrayList<Album> findAlbums(String authorName)
 	{
 		//Updating fetching URL to match author name
-		setFetchUrl(getFetchUrl() + "/search?q=" + getAuthorName() + " albums");
+		setFetchUrl(getFetchUrl() + "/search?q=" + authorName + " albums");
 		
 		//Printing fetching URL
 		System.out.println("Finding albums on: \"" + getFetchUrl() + "\" ...");
@@ -34,7 +35,7 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 		Document document = getDocument(getFetchUrl());
 		if(document == null)
 			//getDocument() didn't work fetching this author
-			return;
+			return null;
 		
 		//Acknowledging author name
 		Element authorElement = document.select("span[data-elabel]").first();
@@ -43,27 +44,26 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 			System.out.println("Can't find author on page, please retry");
 			
 			//End
-			return;
+			return null;
 		}
-		setAuthorName(authorElement.html());
+		String correctAuthorName = authorElement.html();
 		
-		//Instantiation of Author object and its albums
-		Author author = new Author(getAuthorName());
-		ArrayList<Album> albums = new ArrayList<>();
+		//Instantiation of Author object
+		Author author = new Author(correctAuthorName);
 
 		//Scraping songs from google songs panels
 		Elements albumPanels = document.select("a[role=listitem]");
 		
 		//Presentation of fetching progression
 		int foundAlbum = 0;
-		System.out.println("Found albums for author: " + getAuthorName());
+		System.out.println("Found albums for author: " + correctAuthorName);
 		for(Element albumPanel: albumPanels)
 		{
 			//Getting current album name
 			String albumName = albumPanel.attr("aria-label");
 			
 			//Instantiation of Album object
-			albums.add(new Album(author, albumName));
+			getAlbums().add(new Album(author, albumName));
 			
 			//Printing album's data
 			System.out.println("Album #" + ++foundAlbum + ": " + albumName);
@@ -75,7 +75,7 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 			if(songElements.size() == 0)
 			{
 				//If no song were found without author's name in query
-				albumGooglePage = getDocument(GOOGLE_STRING_URL + "/search?q=" + getAuthorName() + " " + albumName + " musics");
+				albumGooglePage = getDocument(GOOGLE_STRING_URL + "/search?q=" + correctAuthorName + " " + albumName + " musics");
 				songElements = albumGooglePage.select(htmlSongContainerSelector);
 			}
 			
@@ -98,7 +98,7 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 					URL youtubeSongUrl = new URL(youtubeSongStringUrl);
 					
 					//Instantiation of MusicResource object
-					albums.get(albums.size() - 1).getMusicResources().add(new MusicResource(youtubeSongUrl, null, songName));
+					getAlbums().get(getAlbums().size() - 1).getMusicResources().add(new MusicResource(youtubeSongUrl, null, songName));
 					
 					System.out.println("Song #" + ++foundSong + ": " + songName + " (" + youtubeSongUrl + ")");
 				}
@@ -108,15 +108,18 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 				}
 			}
 		}
+		
+		return getAlbums();
 	}
 
-	public String getAuthorName()
+	@Override
+	public ArrayList<Album> getAlbums()
 	{
-		return _authorName;
+		return _albums;
 	}
-
-	public void setAuthorName(String authorName)
+	
+	private void setAlbums(ArrayList<Album> albums)
 	{
-		_authorName = authorName;
+		_albums = albums;
 	}
 }
