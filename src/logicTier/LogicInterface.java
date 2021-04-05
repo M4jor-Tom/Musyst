@@ -5,5 +5,5 @@ import resourcePackage.MusicResource;
 
 public interface LogicInterface
 {
-	MediaInterface<MusicResource> getMediaInterface();
+	public MediaInterface<MusicResource> getMediaInterface();
 }
