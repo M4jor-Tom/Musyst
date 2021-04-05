@@ -11,8 +11,8 @@ import resourcePackage.Resource;
 public abstract class DirectWebScraper<ResourceType extends Resource>
 {
 	private ArrayList<ResourceType> _resources;
-	public String _fetchUrl;
-	final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36";
+	private String _fetchUrl;
+	protected final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36";
 	
 	public DirectWebScraper(String fetchUrl)
 	{
