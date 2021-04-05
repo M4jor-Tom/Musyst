@@ -8,7 +8,7 @@ import org.jsoup.nodes.Document;
 
 import resourcePackage.Resource;
 
-public abstract class DirectWebScraper<ResourceType extends Resource> implements MediaInterface<ResourceType>
+public abstract class DirectWebScraper<ResourceType extends Resource>
 {
 	private ArrayList<ResourceType> _resources;
 	public String _fetchUrl;
