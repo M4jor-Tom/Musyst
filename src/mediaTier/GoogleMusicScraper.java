@@ -21,6 +21,55 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 		super(GOOGLE_STRING_URL);
 		setAlbums(new ArrayList<>());
 	}
+
+	@Override
+	public Album findAlbum(Author author, String albumName)
+	{
+		//Instantiation of Album object
+		Album album = new Album(author, albumName);
+		
+		//Getting album's songs
+		Document albumGooglePage = getDocument(GOOGLE_STRING_URL + "/search?q=" + albumName + " musics");
+		String htmlSongContainerSelector = "div[data-attrid=kc:/music/album:songs]";
+		Elements songElements = albumGooglePage.select(htmlSongContainerSelector);
+		if(songElements.size() == 0)
+		{
+			//If no song were found without author's name in query
+			albumGooglePage = getDocument(GOOGLE_STRING_URL + "/search?q=" + author.getName() + " " + albumName + " musics");
+			songElements = albumGooglePage.select(htmlSongContainerSelector);
+		}
+		
+		//Adding new songs to album, and printing informations
+		int foundSong = 0;
+		for(Element songElement: songElements)
+		{
+			//Getting song's name
+			String songName = songElement.select("div.title").html();
+			
+			//Getting song's google stringUrl
+			String songStringUrl = GOOGLE_STRING_URL + songElement.select("a.rl_item.rl_item_base").attr("href");
+			
+			//Getting son's youtube URL
+			Document googleSongPage = getDocument(songStringUrl);
+			String youtubeSongStringUrl = googleSongPage.select("#rcnt").select("a[href*=\"youtube\"]").attr("href");
+			
+			try
+			{
+				URL youtubeSongUrl = new URL(youtubeSongStringUrl);
+				
+				//Instantiation of MusicResource object
+				album.getMusicResources().add(new MusicResource(youtubeSongUrl, null, songName));
+				
+				System.out.println("Song #" + ++foundSong + ": " + songName + " (" + youtubeSongUrl + ")");
+			}
+			catch(MalformedURLException e)
+			{
+				System.out.println("Unknown string url for " + songName + ": " + youtubeSongStringUrl);
+			}
+		}
+		
+		return album;
+	}
 	
 	@Override
 	public ArrayList<Album> findAlbums(String authorName)
@@ -63,50 +112,10 @@ public class GoogleMusicScraper extends DirectWebScraper<MusicResource> implemen
 			String albumName = albumPanel.attr("aria-label");
 			
 			//Instantiation of Album object
-			getAlbums().add(new Album(author, albumName));
+			getAlbums().add(findAlbum(author, albumName));
 			
 			//Printing album's data
 			System.out.println("Album #" + ++foundAlbum + ": " + albumName);
-			
-			//Getting album's songs
-			Document albumGooglePage = getDocument(GOOGLE_STRING_URL + "/search?q=" + albumName + " musics");
-			String htmlSongContainerSelector = "div[data-attrid=kc:/music/album:songs]";
-			Elements songElements = albumGooglePage.select(htmlSongContainerSelector);
-			if(songElements.size() == 0)
-			{
-				//If no song were found without author's name in query
-				albumGooglePage = getDocument(GOOGLE_STRING_URL + "/search?q=" + correctAuthorName + " " + albumName + " musics");
-				songElements = albumGooglePage.select(htmlSongContainerSelector);
-			}
-			
-			//Adding new songs to album, and printing informations
-			int foundSong = 0;
-			for(Element songElement: songElements)
-			{
-				//Getting song's name
-				String songName = songElement.select("div.title").html();
-				
-				//Getting song's google stringUrl
-				String songStringUrl = GOOGLE_STRING_URL + songElement.select("a.rl_item.rl_item_base").attr("href");
-				
-				//Getting son's youtube URL
-				Document googleSongPage = getDocument(songStringUrl);
-				String youtubeSongStringUrl = googleSongPage.select("#rcnt").select("a[href*=\"youtube\"]").attr("href");
-				
-				try
-				{
-					URL youtubeSongUrl = new URL(youtubeSongStringUrl);
-					
-					//Instantiation of MusicResource object
-					getAlbums().get(getAlbums().size() - 1).getMusicResources().add(new MusicResource(youtubeSongUrl, null, songName));
-					
-					System.out.println("Song #" + ++foundSong + ": " + songName + " (" + youtubeSongUrl + ")");
-				}
-				catch(MalformedURLException e)
-				{
-					System.out.println("Unknown string url for " + songName + ": " + youtubeSongStringUrl);
-				}
-			}
 		}
 		
 		return getAlbums();
