@@ -1,9 +1,8 @@
 package logicTier;
 
-import mediaTier.MediaInterface;
-import resourcePackage.MusicResource;
+import musicFindystPackage.MusicFindystInterface;
 
 public interface LogicInterface
 {
-	public MediaInterface<MusicResource> getMediaInterface();
+	public MusicFindystInterface getMusicFindystInterface();
 }

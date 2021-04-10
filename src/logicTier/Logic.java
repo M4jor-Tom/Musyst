@@ -1,26 +1,25 @@
 package logicTier;
 
 
-import mediaTier.MediaInterface;
-import resourcePackage.MusicResource;
+import musicFindystPackage.MusicFindystInterface;
 
 public class Logic implements LogicInterface
 {
-	MediaInterface<MusicResource> _mediaInterface;
+	MusicFindystInterface _musicFindystInterface;
 	
-	public Logic(MediaInterface<MusicResource> mediaInterface)
+	public Logic(MusicFindystInterface musicFindystInterface)
 	{
-		setMediaInterface(mediaInterface);
+		setMusicFindystInterface(musicFindystInterface);
 	}
 
 	@Override
-	public MediaInterface<MusicResource> getMediaInterface()
+	public MusicFindystInterface getMusicFindystInterface()
 	{
-		return _mediaInterface;
+		return _musicFindystInterface;
 	}
 	
-	public void setMediaInterface(MediaInterface<MusicResource> mediaInterface)
+	public void setMusicFindystInterface(MusicFindystInterface musicFindystInterface)
 	{
-		_mediaInterface = mediaInterface;
+		_musicFindystInterface = musicFindystInterface;
 	}
 }

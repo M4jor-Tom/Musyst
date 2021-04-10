@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 
 import org.jsoup.Connection;
 
-import mediaTier.DirectWebScraper;
+import musicFindystPackage.DirectWebScraper;
 import resourcePackage.MusicResource;
 
 public abstract class MusicResourceDownloader extends DirectWebScraper<MusicResource>
