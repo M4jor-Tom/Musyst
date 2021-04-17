@@ -11,6 +11,7 @@ import logicTier.*;
 import resourcePackage.Album;
 import resourcePackage.MusicResource;
 import resourcePackage.ResourcystVersionable;
+import seekyst.SeekystVersionable;
 import versionystPackage.Versionable;
 import versionystPackage.Versionyst;
 
@@ -23,15 +24,17 @@ public class MainClass
 		Versionable[] versionables =
 		{
 			new MusystVersionable(),
+			new Versionyst(),
 			new MusicFindystVersionable(),
 			new ResourcystVersionable(),
-			new Versionyst()
+			new SeekystVersionable()
 		};
 		
 		//Versions setting
-		existingDependencies.put("MusicFindystVersionable", versionables[1].getVersionId());
-		existingDependencies.put("ResourcystVersionable", versionables[2].getVersionId());
-		existingDependencies.put("Versionyst", versionables[3].getVersionId());
+		existingDependencies.put("Versionyst", versionables[1].getVersionId());
+		existingDependencies.put("MusicFindystVersionable", versionables[2].getVersionId());
+		existingDependencies.put("ResourcystVersionable", versionables[3].getVersionId());
+		existingDependencies.put("SeekystVersionable", versionables[4].getVersionId());
 
 		//Versions checking
 		for(Versionable versionable: versionables)
