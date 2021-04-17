@@ -7,7 +7,9 @@ public final class MusystVersionable extends Versionable
 	public MusystVersionable()
 	{
 		super();
-		//getDependencies().put(null, 0);
+		getDependencies().put("ResourcystVersionable", 4);
+		getDependencies().put("MusicFindystVersionable", 1);
+		getDependencies().put("Versionyst", 4);
 	}
 
 	@Override
